@@ -24,12 +24,12 @@ services:
   web:
     build: ./web
     container_name: flask_server
-    # command: python3 app.py
+    command: flask run
     ports:
       - "5000:5000"
     volumes:
       # - ./src:/work/app
-      - ./web/:/work
+      - ./web/:/work/web
     # privileged: true
     links: 
       - database
