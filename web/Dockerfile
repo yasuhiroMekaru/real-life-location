@@ -5,7 +5,10 @@ RUN apt-get update && \
 	vim \
 	sudo \
 	python3 \
-	python3-pip
+	python3-pip \
+	python3-dev \
+	default-libmysqlclient-dev \
+	build-essential
 
 RUN pip3 install -U pip
 
