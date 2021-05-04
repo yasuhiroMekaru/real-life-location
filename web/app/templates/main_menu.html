@@ -11,23 +11,15 @@
             <div class="col-4">
                 作品名
             </div>
-            <div class="col" id="product_name">
+            <div class="col text-center" id="product_name">
                 {{ datas.p_title }}
-            </div>
-        </div>
-        <div class="row text-center">
-            <div class="col-4">
-                カテゴリ
-            </div>
-            <div class="col" id="product_category">
-                
             </div>
         </div>
         <div class="row text-center">
             <div class="col-4">
                 監督
             </div>
-            <div class="col" id="product_director">
+            <div class="col txt-center" id="product_director">
                 {{ datas.p_director }}                
             </div>
         </div>
@@ -41,12 +33,12 @@
         </div>
         <div class="row">
             <div class="col text-center">
-                <a href="{{ url_for('show_all_map', products_id=datas.p_id) }}" class="btn btn-primary w-75">MAP</a>
+                <a href="{{ url_for('show_all_map', products_id=datas.p_id) }}" class="btn btn-primary w-100 m-2">MAP</a>
             </div>
         </div>
-        <div class="row text-center">
-            <div class="col">
-                <img src="/static/img/{{ datas.p_image_path }}" class="w-75" id="product_image">
+        <div class="row">
+            <div class="col text-center">
+                <img src="/static/img/{{ datas.p_image_path }}" class="w-75" id="product_image" alt="作品画像">
             </div>
         </div>
 
