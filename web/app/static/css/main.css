@@ -1,0 +1,8 @@
+div.list {
+    background-color: white;
+}
+
+div.list:hover {
+    background-color: cadetblue;
+    cursor: pointer;
+}

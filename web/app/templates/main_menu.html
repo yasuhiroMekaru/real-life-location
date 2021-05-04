@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+        <div class="row m-3 text-center">
+            <div class="col">
+                <h1>作品概要</h1>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-4">
+                作品名
+            </div>
+            <div class="col" id="product_name">
+                {{ datas.p_title }}
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-4">
+                カテゴリ
+            </div>
+            <div class="col" id="product_category">
+                
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-4">
+                監督
+            </div>
+            <div class="col" id="product_director">
+                {{ datas.p_director }}                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 text-center">
+                作品概要
+            </div>
+            <div class="col" id="product_overview">
+                {{ datas.p_overview }}
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col">
+                <img src="/static/img/{{ datas.p_image_path }}" class="w-75" id="product_image">
+            </div>
+        </div>
+
+        <div class="row m-3" >
+            <div class="col" id=real_life_list>
+                {% for data in datas.real_life_location_data %}
+                    <div class="row list border rounded m-1" onclick="location.href = '{{url_for( "show_map", real_life_location_id=data.r_id)}}'">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col-2">聖地名</div>
+                                <div class="col-4">{{data.r_name}}</div>
+                                <div class="col-2">登場シーン</div>
+                                <div class="col-4">{{data.r_scene}}</div>
+                            </div>
+                            <hr/>
+                            <div class="row">
+                                <div class="col">{{data.r_overview}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col mb-1 w-100">
+                                    <a href="{{ url_for('show_map', real_life_location_id=data.r_id )}}" class="btn btn-primary w-100">MAP</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+{% endblock %}
