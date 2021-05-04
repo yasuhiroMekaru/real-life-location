@@ -46,7 +46,10 @@ def get_category():
 	categories = session.query(Category).all()
 	datas = []
 	for category in categories:
-		datas.append(category.category)
+		data = {}
+		data['category_id'] = category.category_id
+		data['category'] = category.category
+		datas.append(data)
 	logger.info({
 			'action': 'controller.py',
 			'datas': datas,
@@ -123,7 +126,7 @@ def get_latlng_data(real_life_location_id):
 	Args:
 		real_life_location_id (int): 聖地id
 	Return:
-		dict
+		List
 	"""
 	datas = session.query(Real_life_location).\
 	filter(Real_life_location.real_life_location_id==real_life_location_id).all()
@@ -139,7 +142,9 @@ def get_latlng_data(real_life_location_id):
 			'real_life_location_data': real_life_location_data,
 			'real_life_location_data type': type(real_life_location_data)
 		})
-	return real_life_location_data
+	real_life_location_datas = []
+	real_life_location_datas.append(real_life_location_data)
+	return real_life_location_datas
 
 
 def get_all_latlng_datas(products_id):
