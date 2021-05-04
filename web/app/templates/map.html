@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+
+		<!-- jQuery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<!-- Google Maps API -->
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBg9IYpPXlLv6xsC1NkX-mqc1rFyt29uT8"></script>
+	</head>
+	<body>
+		<div>
+			<h2>聖地はここだよ</h2>
+
+			<div id="map" style="width: 90%; height: 90%;"></div>
+
+		</div>
+
+		<script type="text/javascript">
+			let myLatLng;
+
+			let real_life_locations = {{ datas | tojson }};
+			console.log('real_life_locations');
+			console.log(real_life_locations);
+
+			function init_map() {
+				// ユーザーの端末が位置情報取得できるか確認
+				if (navigator.geolocation) {
+					// 現在地を取得
+					navigator.geolocation.getCurrentPosition(
+						// 取得成功した場合
+						function(position) {
+							// ユーザー端末の緯度・経度を取得
+							myLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+							console.log('geolocation position lat: ' + position.coords.latitude);
+							console.log('geolocation position lng: ' + position.coords.longitude);
+
+							// マップオプションを変数に格納
+							let mapOptions = {
+								zoom : 5.5,          // 拡大倍率
+								center : myLatLng  // 緯度・経度
+							};
+							// マップオブジェクトを生成
+							let map = new google.maps.Map(
+								document.getElementById("map"), // マップを表示する要素
+								mapOptions         // マップオプション
+							);
+
+							for(let i=0; i<real_life_locations.length; i++){
+								latitude = real_life_locations[i].latitude;
+								longitude = real_life_locations[i].longitude;
+								rll_latlng = new google.maps.LatLng(latitude, longitude);
+
+								// マーカーオブジェクトを生成
+								let marker = new google.maps.Marker({
+									position: rll_latlng,
+									map: map,
+									title: real_life_locations[i].name
+								});
+
+								let contentString = 
+									'<div><p>聖地名: ' + real_life_locations[i].name + '</p>' +
+									'<p>シーン: ' + real_life_locations[i].scene + '</p>' +
+									'<p>概要: ' + real_life_locations[i].overview + '</p></div>';
+
+								let infoWindow = new google.maps.InfoWindow({
+									content: contentString
+								})
+
+								// markerオブジェクトへのクリックイベント
+								marker.addListener('click', ()=>{
+									infoWindow.open(map, marker);
+								});
+							}
+					 	},
+						// 取得失敗した場合
+						function(error) {
+							// エラーメッセージを表示
+							switch(error.code) {
+								case 1: // PERMISSION_DENIED
+									alert("位置情報の利用が許可されていません");
+									break;
+								case 2: // POSITION_UNAVAILABLE
+									alert("現在位置が取得できませんでした");
+									break;
+								case 3: // TIMEOUT
+									alert("タイムアウトになりました");
+									break;
+								default:
+									alert("その他のエラー(エラーコード:"+error.code+")");
+									break;
+							}
+						}
+				 	);
+				// Geolocation APIに対応していない
+				} else {
+				 alert("この端末では位置情報が取得できません");
+				}
+			}
+
+			function create_map(){
+
+				// // マップオプションを変数に格納
+				// let mapOptions = {
+				// 	zoom : 12,          // 拡大倍率
+				// 	center : myLatLng  // 緯度・経度
+				// };
+				// // マップオブジェクトを生成
+				// let map = new google.maps.Map(
+				// 	document.getElementById("map"), // マップを表示する要素
+				// 	mapOptions         // マップオプション
+				// );
+
+				// // マーカーオブジェクトを生成
+				// let marker = new google.maps.Marker({
+				// 	position: myLatLng,
+				// 	map: map
+				// });
+
+				// // mapオブジェクトへのクリックイベント
+				// map.addListener('click', (event)=>{
+				// });
+			}
+
+			$(function(){
+				console.log('jQuery start');
+				// 端末の大きさを取得し、9掛けする
+				let map_width = $(window).width() * 0.9;
+				let map_height = $(window).height() * 0.9;
+				$('#map').width(map_width);
+				$('#map').height(map_height);
+
+				init_map();
+
+				create_map();
+			});
+		</script>
+	</body>
+</html>

@@ -43,20 +43,23 @@ def get_category():
 	Return:
 		List
 	"""
-	categories = session.query(Category).all()
-	datas = []
-	for category in categories:
-		data = {}
-		data['category_id'] = category.category_id
-		data['category'] = category.category
-		datas.append(data)
-	logger.info({
-			'action': 'controller.py',
-			'datas': datas,
-			'datas type': type(datas),
-			'datas[0]': datas[0],
-			'datas[0] type': type(datas[0])
-		})
+	try:
+		categories = session.query(Category).all()
+		datas = []
+		for category in categories:
+			data = {}
+			data['category_id'] = category.category_id
+			data['category'] = category.category
+			datas.append(data)
+		logger.info({
+				'action': 'controller.py',
+				'datas': datas,
+				'datas type': type(datas),
+				'datas[0]': datas[0],
+				'datas[0] type': type(datas[0])
+			})
+	finally:
+		session.close()
 	return datas
 
 
@@ -67,17 +70,20 @@ def get_products(category_id):
 	Return:
 		List
 	"""
-	products = session.query(Products.products_id, Products.title).filter(Products.category_id == category_id).all()
-	datas = []
-	for product in products:
-		datas.append(product)
-		logger.info({
-			'action': 'controller.py',
-			'datas': datas,
-			'datas type': type(datas),
-			'datas[0]': datas[0][0],
-			'datas[0] type': type(datas[0][0])
-		})
+	try:
+		products = session.query(Products.products_id, Products.title).filter(Products.category_id == category_id).all()
+		datas = []
+		for product in products:
+			datas.append(product)
+			logger.info({
+				'action': 'controller.py',
+				'datas': datas,
+				'datas type': type(datas),
+				'datas[0]': datas[0][0],
+				'datas[0] type': type(datas[0][0])
+			})
+	finally:
+		session.close()
 	return datas
 
 
@@ -88,35 +94,38 @@ def get_all_data(products_id):
 	Return:
 		dict
 	"""
-	products_datas = session.query(Products).filter(Products.products_id==products_id).all()
-	main_data = {}
-	for products_data in products_datas:
-		main_data['p_id'] = products_data.products_id
-		main_data['p_title'] = products_data.title
-		main_data['p_director'] = products_data.director
-		main_data['p_overview'] = products_data.overview
-		main_data['p_image_path'] = products_data.image_path
-	# logger.info({
-	# 		'action': 'controller.py',
-	# 		'main_data': main_data
-	# 	})
-	rrl_datas = session.query(Real_life_location).filter(Real_life_location.products_id==products_id).all()
-	real_life_location_datas = []
-	for rrl_data in rrl_datas:
-		data = {}
-		data['r_name'] = rrl_data.name
-		data['r_scene'] = rrl_data.scene
-		data['r_overview'] = rrl_data.overview
-		data['r_image_path'] = rrl_data.image_path
-		data['r_latitude'] = rrl_data.latitude
-		data['r_longitude'] = rrl_data.longitude
-		data['r_id'] = rrl_data.real_life_location_id
-		real_life_location_datas.append(data)
-	# logger.info({
-	# 		'action': 'controller.py',
-	# 		'real_life_location_datas': real_life_location_datas
-	# 	})
-	main_data['real_life_location_data'] = real_life_location_datas
+	try:
+		products_datas = session.query(Products).filter(Products.products_id==products_id).all()
+		main_data = {}
+		for products_data in products_datas:
+			main_data['p_id'] = products_data.products_id
+			main_data['p_title'] = products_data.title
+			main_data['p_director'] = products_data.director
+			main_data['p_overview'] = products_data.overview
+			main_data['p_image_path'] = products_data.image_path
+		# logger.info({
+		# 		'action': 'controller.py',
+		# 		'main_data': main_data
+		# 	})
+		rrl_datas = session.query(Real_life_location).filter(Real_life_location.products_id==products_id).all()
+		real_life_location_datas = []
+		for rrl_data in rrl_datas:
+			data = {}
+			data['r_name'] = rrl_data.name
+			data['r_scene'] = rrl_data.scene
+			data['r_overview'] = rrl_data.overview
+			data['r_image_path'] = rrl_data.image_path
+			data['r_latitude'] = rrl_data.latitude
+			data['r_longitude'] = rrl_data.longitude
+			data['r_id'] = rrl_data.real_life_location_id
+			real_life_location_datas.append(data)
+		# logger.info({
+		# 		'action': 'controller.py',
+		# 		'real_life_location_datas': real_life_location_datas
+		# 	})
+		main_data['real_life_location_data'] = real_life_location_datas
+	finally:
+		session.close()
 
 	return main_data
 
@@ -128,22 +137,25 @@ def get_latlng_data(real_life_location_id):
 	Return:
 		List
 	"""
-	datas = session.query(Real_life_location).\
-	filter(Real_life_location.real_life_location_id==real_life_location_id).all()
-	real_life_location_data = {}
-	real_life_location_data['name'] = datas[0].name
-	real_life_location_data['scene'] = datas[0].scene
-	real_life_location_data['overview'] = datas[0].overview
-	real_life_location_data['image_path'] = datas[0].image_path
-	real_life_location_data['latitude'] = float(datas[0].latitude)
-	real_life_location_data['longitude'] = float(datas[0].longitude)
-	logger.info({
-			'action': 'controller.py',
-			'real_life_location_data': real_life_location_data,
-			'real_life_location_data type': type(real_life_location_data)
-		})
-	real_life_location_datas = []
-	real_life_location_datas.append(real_life_location_data)
+	try:
+		datas = session.query(Real_life_location).\
+		filter(Real_life_location.real_life_location_id==real_life_location_id).all()
+		real_life_location_data = {}
+		real_life_location_data['name'] = datas[0].name
+		real_life_location_data['scene'] = datas[0].scene
+		real_life_location_data['overview'] = datas[0].overview
+		real_life_location_data['image_path'] = datas[0].image_path
+		real_life_location_data['latitude'] = float(datas[0].latitude)
+		real_life_location_data['longitude'] = float(datas[0].longitude)
+		logger.info({
+				'action': 'controller.py',
+				'real_life_location_data': real_life_location_data,
+				'real_life_location_data type': type(real_life_location_data)
+			})
+		real_life_location_datas = []
+		real_life_location_datas.append(real_life_location_data)
+	finally:
+		session.close()
 	return real_life_location_datas
 
 
@@ -154,22 +166,25 @@ def get_all_latlng_datas(products_id):
 	Return:
 		List
 	"""
-	rrl_datas = session.query(Real_life_location).filter(products_id==products_id).all()
-	real_life_location_datas = []
-	for rrl_data in rrl_datas:
-		data = {}
-		data['name'] = rrl_data.name
-		data['scene'] = rrl_data.scene
-		data['overview'] = rrl_data.overview
-		data['image_path'] = rrl_data.image_path
-		data['latitude'] = float(rrl_data.latitude)
-		data['longitude'] = float(rrl_data.longitude)
-		real_life_location_datas.append(data)
-	logger.info({
-			'action': 'controller.py',
-			'real_life_location_datas': real_life_location_datas,
-			'real_life_location_datas type': type(real_life_location_datas)
-		})
+	try:
+		rrl_datas = session.query(Real_life_location).filter(products_id==products_id).all()
+		real_life_location_datas = []
+		for rrl_data in rrl_datas:
+			data = {}
+			data['name'] = rrl_data.name
+			data['scene'] = rrl_data.scene
+			data['overview'] = rrl_data.overview
+			data['image_path'] = rrl_data.image_path
+			data['latitude'] = float(rrl_data.latitude)
+			data['longitude'] = float(rrl_data.longitude)
+			real_life_location_datas.append(data)
+		logger.info({
+				'action': 'controller.py',
+				'real_life_location_datas': real_life_location_datas,
+				'real_life_location_datas type': type(real_life_location_datas)
+			})
+	finally:
+		session.close()
 	return real_life_location_datas
 
 

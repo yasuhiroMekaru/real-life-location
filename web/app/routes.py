@@ -29,7 +29,7 @@ def select_category():
 def select_products(category_id):
 	category_id = int(category_id)
 	products_list = controller.get_products(category_id=category_id)
-	return render_template('select_products.html', products_list=products_list)
+	return render_template('products.html', products_list=products_list)
 
 
 @app.route('/main_menu/<products_id>', methods=['GET'])
@@ -48,6 +48,8 @@ def show_map(real_life_location_id):
 @app.route('/show_all_map/<products_id>', methods=['GET'])
 def show_all_map(products_id):
 	products_id = int(products_id)
+	real_life_location_datas = controller.get_all_latlng_datas(products_id=products_id)
+	return render_template('map.html', datas=real_life_location_datas)
 
 
 
