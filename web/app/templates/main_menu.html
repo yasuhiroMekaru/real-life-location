@@ -39,6 +39,11 @@
                 {{ datas.p_overview }}
             </div>
         </div>
+        <div class="row">
+            <div class="col text-center">
+                <a href="{{ url_for('show_all_map', products_id=datas.p_id) }}" class="btn btn-primary w-100">MAP</a>
+            </div>
+        </div>
         <div class="row text-center">
             <div class="col">
                 <img src="/static/img/{{ datas.p_image_path }}" class="w-75" id="product_image">
