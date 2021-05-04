@@ -97,7 +97,7 @@ def get_all_data(products_id):
 	# 		'action': 'controller.py',
 	# 		'main_data': main_data
 	# 	})
-	rrl_datas = session.query(Real_life_location).all()
+	rrl_datas = session.query(Real_life_location).filter(Real_life_location.products_id==products_id).all()
 	real_life_location_datas = []
 	for rrl_data in rrl_datas:
 		data = {}
@@ -125,17 +125,47 @@ def get_latlng_data(real_life_location_id):
 	Return:
 		dict
 	"""
-	datas = session.query(Real_life_location.latitude, Real_life_location.longitude).\
-		filter(Real_life_location.real_life_location_id==real_life_location_id).all()
-	latlng = {}
-	latlng['latitude'] = float(datas[0][0])
-	latlng['longitude'] = float(datas[0][1])
+	datas = session.query(Real_life_location).\
+	filter(Real_life_location.real_life_location_id==real_life_location_id).all()
+	real_life_location_data = {}
+	real_life_location_data['name'] = datas[0].name
+	real_life_location_data['scene'] = datas[0].scene
+	real_life_location_data['overview'] = datas[0].overview
+	real_life_location_data['image_path'] = datas[0].image_path
+	real_life_location_data['latitude'] = float(datas[0].latitude)
+	real_life_location_data['longitude'] = float(datas[0].longitude)
 	logger.info({
 			'action': 'controller.py',
-			'datas': latlng,
-			'latlng type': type(latlng)
+			'real_life_location_data': real_life_location_data,
+			'real_life_location_data type': type(real_life_location_data)
 		})
-	return latlng
+	return real_life_location_data
+
+
+def get_all_latlng_datas(products_id):
+	"""
+	Args:
+		products_id (int): 作品id
+	Return:
+		List
+	"""
+	rrl_datas = session.query(Real_life_location).filter(products_id==products_id).all()
+	real_life_location_datas = []
+	for rrl_data in rrl_datas:
+		data = {}
+		data['name'] = rrl_data.name
+		data['scene'] = rrl_data.scene
+		data['overview'] = rrl_data.overview
+		data['image_path'] = rrl_data.image_path
+		data['latitude'] = float(rrl_data.latitude)
+		data['longitude'] = float(rrl_data.longitude)
+		real_life_location_datas.append(data)
+	logger.info({
+			'action': 'controller.py',
+			'real_life_location_datas': real_life_location_datas,
+			'real_life_location_datas type': type(real_life_location_datas)
+		})
+	return real_life_location_datas
 
 
 
@@ -151,7 +181,7 @@ if __name__ == '__main__':
 	}
 	# insert_real_life_location(datas)
 
-	r = get_all_data(products_id=3)
+	# r = get_all_latlng_datas(1)
 	# get_latlng_data(1)
 
 
