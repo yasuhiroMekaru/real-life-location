@@ -1,7 +1,7 @@
 import logging
 
-from database import session
-from model import *
+from app.database import session
+from app.model import *
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

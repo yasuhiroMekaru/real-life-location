@@ -2,8 +2,8 @@ import sys
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
-from database import Base
-from database import ENGINE
+from app.database import Base
+from app.database import ENGINE
 
 
 class Products(Base):

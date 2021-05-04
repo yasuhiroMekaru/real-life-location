@@ -1,9 +1,13 @@
 import json
+import logging
 
 from flask import render_template, request
 
 from app import app
-import controller
+from app import controller
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 @app.route('/')
 @app.route('/index')
@@ -11,13 +15,16 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/select_category', methods=['GET', 'POST'])
+@app.route('/select_category', methods=['GET'])
 def select_category():
 	categories = controller.get_category()
+	logger.info({
+			'action': 'routes.py',
+		})
 	return render_template('select_category.html', categories=categories)
 
 
-@app.route('/select_products', methods=['GET', 'POST'])
+@app.route('/select_products', methods=['GET'])
 def select_products():
 	data = request.get_data()
 	category_id = int(json.loads(data))
@@ -25,7 +32,7 @@ def select_products():
 	return render_template('select_products.html', products_list=products_list)
 
 
-@app.route('/main_menu', methods=['GET', 'POST'])
+@app.route('/main_menu', methods=['GET'])
 def main_menu():
 	data = request.get_data()
 	products_id = int(json.loads(data))
@@ -39,3 +46,6 @@ def show_map():
 	latlng = json.loads(data)
 	return render_template('map.html', datas=latlng)
 
+
+if __name__ == '__main__':
+	select_category()
