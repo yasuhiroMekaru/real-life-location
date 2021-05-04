@@ -1,1 +1,3 @@
 db/data/
+db/log/
+web/app/__pycache__
