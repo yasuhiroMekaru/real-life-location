@@ -85,7 +85,7 @@ def get_all_data(products_id):
 	Return:
 		dict
 	"""
-	products_datas = session.query(Products).all()
+	products_datas = session.query(Products).filter(Products.products_id==products_id).all()
 	main_data = {}
 	for products_data in products_datas:
 		main_data['p_title'] = products_data.title
