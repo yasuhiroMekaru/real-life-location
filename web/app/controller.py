@@ -78,42 +78,63 @@ def get_products(category_id):
 	return datas
 
 
-def get_all_datas(products_id):
+def get_all_data(products_id):
 	"""
 	Args:
 		products_id (int): 作品id
 	Return:
-		List
+		dict
 	"""
-	all_datas = session.query(Products, Real_life_location).\
-	join(Real_life_location, Products.products_id==Real_life_location.products_id).\
-	filter(Products.products_id==products_id).all()
-	datas = []
-	for all_data in all_datas:
-		datas.append(all_data)
-	main_datas = []
-	for data in datas:
-		main_data = {}
-		main_data['p_title'] = data.Products.title,
-		main_data['p_director'] = data.Products.director,
-		main_data['p_overview'] = data.Products.overview,
-		main_data['p_image_path'] = data.Products.image_path,
-		main_data['r_name'] = data.Real_life_location.name,
-		main_data['r_scene'] = data.Real_life_location.scene,
-		main_data['r_overview'] = data.Real_life_location.overview,
-		main_data['r_image_path'] = data.Real_life_location.image_path,
-		main_data['r_latitude'] = data.Real_life_location.latitude,
-		main_data['r_longitude'] = data.Real_life_location.longitude
-		main_datas.append(main_data)
+	products_datas = session.query(Products).all()
+	main_data = {}
+	for products_data in products_datas:
+		main_data['p_title'] = products_data.title
+		main_data['p_director'] = products_data.director
+		main_data['p_overview'] = products_data.overview
+		main_data['p_image_path'] = products_data.image_path
+	# logger.info({
+	# 		'action': 'controller.py',
+	# 		'main_data': main_data
+	# 	})
+	rrl_datas = session.query(Real_life_location).all()
+	real_life_location_datas = []
+	for rrl_data in rrl_datas:
+		data = {}
+		data['r_name'] = rrl_data.name
+		data['r_scene'] = rrl_data.scene
+		data['r_overview'] = rrl_data.overview
+		data['r_image_path'] = rrl_data.image_path
+		data['r_latitude'] = rrl_data.latitude
+		data['r_longitude'] = rrl_data.longitude
+		data['r_id'] = rrl_data.real_life_location_id
+		real_life_location_datas.append(data)
+	# logger.info({
+	# 		'action': 'controller.py',
+	# 		'real_life_location_datas': real_life_location_datas
+	# 	})
+	main_data['real_life_location_data'] = real_life_location_datas
 
+	return main_data
+
+
+def get_latlng_data(real_life_location_id):
+	"""
+	Args:
+		real_life_location_id (int): 聖地id
+	Return:
+		dict
+	"""
+	datas = session.query(Real_life_location.latitude, Real_life_location.longitude).\
+		filter(Real_life_location.real_life_location_id==real_life_location_id).all()
+	latlng = {}
+	latlng['latitude'] = float(datas[0][0])
+	latlng['longitude'] = float(datas[0][1])
 	logger.info({
 			'action': 'controller.py',
-			'main_datas': main_datas,
-			'main_datas[0]': main_datas[0],
-			'main_datas[0] type': type(main_datas[0])
+			'datas': latlng,
+			'latlng type': type(latlng)
 		})
-	return main_datas
-
+	return latlng
 
 
 
@@ -129,7 +150,8 @@ if __name__ == '__main__':
 	}
 	# insert_real_life_location(datas)
 
-	r = get_all_datas(products_id=3)
+	r = get_all_data(products_id=3)
+	# get_latlng_data(1)
 
 
 
