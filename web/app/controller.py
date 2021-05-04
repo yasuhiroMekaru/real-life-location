@@ -88,6 +88,7 @@ def get_all_data(products_id):
 	products_datas = session.query(Products).filter(Products.products_id==products_id).all()
 	main_data = {}
 	for products_data in products_datas:
+		main_data['p_id'] = products_data.products_id
 		main_data['p_title'] = products_data.title
 		main_data['p_director'] = products_data.director
 		main_data['p_overview'] = products_data.overview
